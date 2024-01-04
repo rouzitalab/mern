@@ -1,1 +1,4 @@
+# Database username and password
 .env
+# Books thumbnails
+uploads/
