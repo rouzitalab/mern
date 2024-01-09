@@ -3,6 +3,7 @@ const cors = require("cors");
 const express = require("express");
 const connectDB = require("./connectDB");
 const Book = require("./models/Books");
+const multer = require("multer");
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -33,6 +34,36 @@ app.get("/api/books/:slug", async (req, res) => {
         const slugParam = req.params.slug;
       const data = await Book.findOne({slug: slugParam});
       res.json(data);
+    } catch (error) {
+      res.status(500).json({ error: "An error occurred while fetching books." });
+    }
+  });
+
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+      const uniquePrefix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      cb(null, uniquePrefix+'-'+file.originalname);
+    }
+  })
+  const upload = multer({ storage: storage});
+
+  app.post("/api/books", upload.single("thumbnail"), async (req, res) => {
+    try {
+      console.log(req.body);
+      // console.log(req.file);
+        const newBook = new Book({
+          title: req.body.title,
+          slug: req.body.slug,
+          stars: req.body.stars,
+          description: req.body.description,
+          category: req.body.category,
+          // thumbnail: req.file.filename,
+        });
+        await Book.create(newBook);
+      res.json("Data Submitted.");
     } catch (error) {
       res.status(500).json({ error: "An error occurred while fetching books." });
     }
