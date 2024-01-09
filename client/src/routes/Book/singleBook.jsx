@@ -39,6 +39,7 @@ function singleBook() {
             src={`http://localhost:8000/uploads/${data.thumbnail}`}
             alt={data?.title}
           />
+          <Link to={`/editbook/${data.slug}`}>📝 Edit</Link>
         </div>
         <div className="col-2">
           <h1>{data?.title}</h1>
