@@ -37,6 +37,7 @@ function book() {
     <div>
       <h1>Books</h1>
       <p>Here lies the books I want to read!</p>
+      <Link to="/createbook">+ Add New Book</Link>
       <div className="filters">
         <label>Categories</label>
         <select onChange={(e)=>setSelectedCategory(e.target.value)}>
